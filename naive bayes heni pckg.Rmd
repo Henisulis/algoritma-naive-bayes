@@ -30,8 +30,8 @@ Algoritma Naïve Bayes merupakan metode yang ditemukan oleh ilmuan inggris yaitu
 
 # Tahapan Algoritma Naive Baytes
 
-# Eksperimen Algoritma Nive Bayes
-## Library
+## Eksperimen Algoritma Nive Bayes
+### Library
 ```{r}
 library(mlbench)
 library(e1071)
@@ -60,6 +60,7 @@ CleanDataset <- na.omit(HouseVotes84)
 qplot(Class, data=CleanDataset, geom = "bar") + theme(axis.text.x = element_text(angle = 0, hjust = 2))
 
 ```
+
 ```{r}
 set.seed(20)
 # pengambilan sampel bertingkat. Pilih baris berdasarkan variabel Kelas sebagai strata
@@ -78,5 +79,26 @@ vote_test_labels  <- testData$Class
 prop.table(table(vote_train_labels))
 
 ```
+
+```{r}
+prop.table(table(vote_test_labels))
+```
+## TRAINING MODEL DATA
+
+```{r}
+vote_classifier <- naiveBayes(trainingData, vote_train_labels)
+```
+## EVALUASI KINERJA MODEL
+
+Prediksi Naive Bayes di vote_test_pred dan kemudian membandingkannya dengan label yang sebenarnya.
+
+```{r}
+vote_test_pred <- predict(vote_classifier, testData)
+head(vote_test_pred)
+CrossTable(vote_test_pred, vote_test_labels,
+           prop.chisq = FALSE, prop.t = FALSE, prop.r = FALSE,
+           dnn = c('predicted', 'actual'))
+```
+Tingkat akurasi keseluruhan model adalah 0,955. 1 suara demokrat diidentifikasi sebagai republik dan 1 suara republik diberi label sebagai demokrat.
 
 # Referensi

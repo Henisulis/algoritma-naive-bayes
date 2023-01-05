@@ -7,7 +7,7 @@
 
         <meta name="author" content="heni sulistiyowati-Institut Teknologi Statistika dan Bisnis Muhammadiyah" />
     
-        <meta name="date" content="2022-12-29" />
+        <meta name="date" content="2023-01-05" />
     
     <title>algoritma naive bayes dengan R</title>
 
@@ -1590,11 +1590,12 @@ margin-left: 0 !important;
       <ul>
       <li><a href="#algoritma-naive-bayes" id="toc-algoritma-naive-bayes">Algoritma Naive Bayes</a></li>
       <li><a href="#tahapan-algoritma-naive-baytes" id="toc-tahapan-algoritma-naive-baytes">Tahapan Algoritma Naive
-      Baytes</a></li>
-      <li><a href="#eksperimen-algoritma-nive-bayes" id="toc-eksperimen-algoritma-nive-bayes">Eksperimen Algoritma Nive
-      Bayes</a>
+      Baytes</a>
       <ul>
-      <li><a href="#library" id="toc-library">Library</a></li>
+      <li><a href="#eksperimen-algoritma-nive-bayes" id="toc-eksperimen-algoritma-nive-bayes">Eksperimen Algoritma Nive
+      Bayes</a></li>
+      <li><a href="#training-model-data" id="toc-training-model-data">TRAINING MODEL DATA</a></li>
+      <li><a href="#evaluasi-kinerja-model" id="toc-evaluasi-kinerja-model">EVALUASI KINERJA MODEL</a></li>
       </ul></li>
       <li><a href="#referensi" id="toc-referensi">Referensi</a></li>
       </ul>
@@ -1602,7 +1603,7 @@ margin-left: 0 !important;
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
                   <p class="author"><span class="glyphicon glyphicon-user"></span> heni
 sulistiyowati-Institut Teknologi Statistika dan Bisnis Muhammadiyah</p>
-                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2022-12-29</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2023-01-05</p>
           </div>
    </div>
      
@@ -1627,11 +1628,10 @@ sehingga dikenal theorema naïve bayes.</p>
 </div>
 <div id="tahapan-algoritma-naive-baytes" class="section level1">
 <h1>Tahapan Algoritma Naive Baytes</h1>
-</div>
-<div id="eksperimen-algoritma-nive-bayes" class="section level1">
-<h1>Eksperimen Algoritma Nive Bayes</h1>
-<div id="library" class="section level2">
-<h2>Library</h2>
+<div id="eksperimen-algoritma-nive-bayes" class="section level2">
+<h2>Eksperimen Algoritma Nive Bayes</h2>
+<div id="library" class="section level3">
+<h3>Library</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbench)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code></pre></div>
@@ -1703,6 +1703,56 @@ nilai NA.</p>
 <pre><code>## vote_train_labels
 ##   democrat republican 
 ##  0.5344828  0.4655172</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(vote_test_labels))</span></code></pre></div>
+<pre><code>## vote_test_labels
+##   democrat republican 
+##  0.5344828  0.4655172</code></pre>
+</div>
+</div>
+<div id="training-model-data" class="section level2">
+<h2>TRAINING MODEL DATA</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>vote_classifier <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(trainingData, vote_train_labels)</span></code></pre></div>
+</div>
+<div id="evaluasi-kinerja-model" class="section level2">
+<h2>EVALUASI KINERJA MODEL</h2>
+<p>Prediksi Naive Bayes di vote_test_pred dan kemudian membandingkannya
+dengan label yang sebenarnya.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>vote_test_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(vote_classifier, testData)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vote_test_pred)</span></code></pre></div>
+<pre><code>## [1] democrat   republican democrat   democrat   republican democrat  
+## Levels: democrat republican</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(vote_test_pred, vote_test_labels,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, <span class="at">prop.t =</span> <span class="cn">FALSE</span>, <span class="at">prop.r =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">dnn =</span> <span class="fu">c</span>(<span class="st">&#39;predicted&#39;</span>, <span class="st">&#39;actual&#39;</span>))</span></code></pre></div>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  116 
+## 
+##  
+##              | actual 
+##    predicted |   democrat | republican |  Row Total | 
+## -------------|------------|------------|------------|
+##     democrat |         59 |          2 |         61 | 
+##              |      0.952 |      0.037 |            | 
+## -------------|------------|------------|------------|
+##   republican |          3 |         52 |         55 | 
+##              |      0.048 |      0.963 |            | 
+## -------------|------------|------------|------------|
+## Column Total |         62 |         54 |        116 | 
+##              |      0.534 |      0.466 |            | 
+## -------------|------------|------------|------------|
+## 
+## </code></pre>
+<p>Tingkat akurasi keseluruhan model adalah 0,955. 1 suara demokrat
+diidentifikasi sebagai republik dan 1 suara republik diberi label
+sebagai demokrat.</p>
 </div>
 </div>
 <div id="referensi" class="section level1">
