@@ -27,8 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Naïve bayes biasa digunkan untuk memprediksi peluang dimasa depan berdasarkan pengalaman pada masa sebelumnya.
 Algoritma Naïve Bayes merupakan metode yang ditemukan oleh ilmuan inggris yaitu Thomas Bayes, sehingga dikenal theorema naïve bayes.
 
-
-# Tahapan Algoritma Naive Baytes
+# Tahapan Naive Bayes
 
 ## Eksperimen Algoritma Nive Bayes
 ### Library
