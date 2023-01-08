@@ -35,35 +35,37 @@ Algoritma Naïve Bayes merupakan metode yang ditemukan oleh ilmuan inggris yaitu
 library(mlbench)
 library(e1071)
 library(caret)
-
-```
-```{r}
 library(ggplot2)
 library(gmodels)
+library(lattice)
+```
+```{r}
 # memuat data
-data(HouseVotes84)
+data("iris")
 
 # struktur
-str(HouseVotes84)
+str(iris)
 ```
 
-```{r eval=FALSE}
-summary(HouseVotes84$Class)
-summary(HouseVotes84)
+```{r}
+summary(iris$Class)
+summary(iris)
 ```
 ada beberapa data yang hilang di dataset. pertama hapus baris dengan nilai NA.
-```{r}
-head(is.na(HouseVotes84))
 
-CleanDataset <- na.omit(HouseVotes84)
-qplot(Class, data=CleanDataset, geom = "bar") + theme(axis.text.x = element_text(angle = 0, hjust = 2))
+```{r}
+head(is.na(iris))
+```
+```{r}
+CleanDataset <- na.omit(iris)
 
 ```
 
 ```{r}
 set.seed(20)
 # pengambilan sampel bertingkat. Pilih baris berdasarkan variabel Kelas sebagai strata
-TrainingDataIndex <- createDataPartition(CleanDataset$Class, p=0.50, list = FALSE)
+TrainingDataIndex <- createDataPartition(CleanDataset$Class, p=TRUE, list = FALSE)
+
 # Buat Data Pelatihan sebagai bagian dari kumpulan data dengan nomor indeks baris seperti yang diidentifikasi di atas dan semua kolom
 trainingData <- CleanDataset[TrainingDataIndex,]
 
@@ -76,28 +78,34 @@ vote_test_labels  <- testData$Class
 
 # periksa proporsi
 prop.table(table(vote_train_labels))
-
 ```
 
 ```{r}
-prop.table(table(vote_test_labels))
+table(predict(classifier, iris[,-2]),iris(2),
+      dnn=list('predicted','actual'))
 ```
-## TRAINING MODEL DATA
+
+## Traning model data
 
 ```{r}
 vote_classifier <- naiveBayes(trainingData, vote_train_labels)
 ```
-## EVALUASI KINERJA MODEL
+
+## Evaluasi kinerja model
 
 Prediksi Naive Bayes di vote_test_pred dan kemudian membandingkannya dengan label yang sebenarnya.
 
 ```{r}
 vote_test_pred <- predict(vote_classifier, testData)
 head(vote_test_pred)
+```
+
+```{r}
 CrossTable(vote_test_pred, vote_test_labels,
            prop.chisq = FALSE, prop.t = FALSE, prop.r = FALSE,
            dnn = c('predicted', 'actual'))
 ```
+
 Tingkat akurasi keseluruhan model adalah 0,955. 1 suara demokrat diidentifikasi sebagai republik dan 1 suara republik diberi label sebagai demokrat.
 
 # Referensi
