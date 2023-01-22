@@ -1,0 +1,113 @@
+---
+title: "e1071 package-naive bayes classifier di R"
+date: "`r Sys.Date()`"
+author: heni sulistiyowati-Institut Teknologi Statistika dan Bisnis Muhammadiyah
+output:
+  rmdformats::readthedown:
+    self_contained: true
+    thumbnails: true
+    lightbox: true
+    gallery: false
+    highlight: tango
+bibliography: references.bib
+---
+
+```{=html}
+<style>
+body{
+text-align: justify}
+</style>
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# pengertian
+## pengertian naive bayes
+​Naïve bayes merupakan salah satu algoritma yang ada pada Teknik klasifikasi, menggunakan metode probabilitas dan statistik.  
+Naïve bayes biasa digunkan untuk memprediksi peluang dimasa depan berdasarkan pengalaman pada masa sebelumnya.
+Algoritma Naïve Bayes merupakan metode yang ditemukan oleh ilmuan inggris yaitu Thomas Bayes, sehingga dikenal theorema naïve bayes.
+
+## e1071 package
+Fungsi paket e1071 meliputi analisis kelas laten, transformasi Fourier waktu singkat, pengelompokan fuzzy, mesin vektor pendukung, komputasi jalur terpendek, pengelompokan kantong, pengklasifikasi naif Bayes…
+
+# Tahapan e1071 package
+
+## naive bayes tutorial
+### install the package (e1071)
+
+jika package e1071 belum ada maka bisa meng-installnya pada packages dan install. 
+```{r}
+library(e1071)
+```
+## test data simpel
+
+lalu cek data yang akan digunakan, kita akan menggunkan data "iris"
+```{r}
+#quick summary and plots
+iris
+```
+
+```{r}
+iris
+```
+
+```{r}
+summary(iris)
+```
+## Navie Bayes Classifier
+
+```{r}
+classifier <- naiveBayes(iris[,1:4],iris[,5])
+classifier
+```
+
+## test sederhana
+
+```{r}
+table(predict(classifier, iris[1]), iris[,5], dnn=list('predicted','actual'))
+```
+# model naive bayes iris dengan R
+
+## prosess
+### library "caret"
+gunakan library (caret)
+```{r}
+library(caret)
+```
+
+### tampilkan data
+kita dapat menampilkan semua data dengan iris seperti cara awal atau menggunakan command "names" untuk menunjukan label/nama kolom.
+```{r}
+head(iris)
+names(iris)
+```
+
+```{r}
+x = iris[,-5]
+y = iris$Species
+```
+Dalam hal ini ditetapkan data dari kolom 1-4 (fitur) ke variabel x, dan kelas ke variabel y
+```{r}
+model = train(x,y,'nb',trControl=trainControl(method='cv',number=10))
+```
+Tampilkan model ringkasan, cukup ketik "model"
+```{r}
+model
+```
+
+```{r}
+predict(model$finalModel,x)
+table(predict(model$finalModel,x)$class,y)
+```
+gunakan prediksi untuk mendapatkan nilai prediksi, dan kelas hasil:
+yang terakhir, kita perlu mengetahui berapa banyak kesalahan yang diklasifikasikan, sehingga kita perlu membandingkan hasil prediksi dengan kelas/spesies iris.
+```{r}
+library(klaR)
+naive_iris <- NaiveBayes(iris$Species ~ ., data = iris)
+plot(naive_iris)
+```
+
+
+
+

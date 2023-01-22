@@ -52,19 +52,30 @@ summary(iris$Class)
 summary(iris)
 ```
 ada beberapa data yang hilang di dataset. pertama hapus baris dengan nilai NA.
+```{r}
+classifier <- naiveBayes(iris[,1:4],iris[,5])
+classifier
+```
+
 
 ```{r}
 head(is.na(iris))
 ```
 ```{r}
-CleanDataset <- na.omit(iris)
-
+cleanDataset <- na.omit(iris)
 ```
+
+
+```{r}
+qqplot(species, data=cleanDataset, geom = "bar")
+```
+
 
 ```{r}
 set.seed(20)
 # pengambilan sampel bertingkat. Pilih baris berdasarkan variabel Kelas sebagai strata
-TrainingDataIndex <- createDataPartition(CleanDataset$Class,times = 1,p=0,5,list = TRUE, groups = min(5,na,rm=FALSE))
+
+TrainingDataIndex <- createDataPartition(CleanDataset$Species, p="species", list = FALSE)
 
 # Buat Data Pelatihan sebagai bagian dari kumpulan data dengan nomor indeks baris seperti yang diidentifikasi di atas dan semua kolom
 trainingData <- CleanDataset[TrainingDataIndex,]
@@ -73,22 +84,17 @@ trainingData <- CleanDataset[TrainingDataIndex,]
 testData <- CleanDataset[-TrainingDataIndex,]
 
 # simpan labelnya
-vote_train_labels <- trainingData$Class
-vote_test_labels  <- testData$Class
+vote_train_labels <- trainingData$species
+vote_test_labels  <- testData$species
 
 # periksa proporsi
 prop.table(table(vote_train_labels))
 ```
 
-```{r}
-table(predict(classifier, iris[,-2]),iris(2),
-      dnn=list('predicted','actual'))
-```
-
 ## Traning model data
 
 ```{r}
-vote_classifier <- naiveBayes(trainingData, vote_train_labels)
+classifier
 ```
 
 ## Evaluasi kinerja model
